@@ -2,6 +2,7 @@ package com.edcast.fraud.reporting.controller;
 
 import com.edcast.fraud.reporting.dto.FraudReportDto;
 import com.edcast.fraud.reporting.entity.Fraud;
+import com.edcast.fraud.reporting.entity.FraudReport;
 import com.edcast.fraud.reporting.requests.KafkaFraudRequest;
 import com.edcast.fraud.reporting.response.PdfReportResponse;
 import com.edcast.fraud.reporting.service.FraudService;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/api")
@@ -42,7 +44,7 @@ public class FraudController {
         return fraudService.generateFraudReport(fraudReportDto.getCompany(), fraudReportDto.getFrom(), fraudReportDto.getTo());
     }
     @GetMapping("/fraud/report/{id}")
-    public PdfReportResponse getFraudReportById(@PathVariable(name="id") int id){
+    public Optional<FraudReport> getFraudReportById(@PathVariable(name="id") int id){
         return fraudService.findById(id);
     }
 }

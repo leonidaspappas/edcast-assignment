@@ -94,10 +94,9 @@ public class FraudService {
         return pdfReportResponse;
     }
 
-    public PdfReportResponse findById(int id){
+    public Optional<FraudReport> findById(int id){
         Optional<FraudReport> fraudReport = fraudReportRepository.findById(id);
-        PdfReportResponse pdfReportResponse = new PdfReportResponse(fraudReport.get().getId(), fraudReport.get().getReportBase64());
-        return pdfReportResponse;
+        return fraudReport;
     }
 
 }
