@@ -1,7 +1,7 @@
 package com.edcast.fraud.reporting.entity;
 
 
-
+import com.edcast.fraud.reporting.requests.FraudRequest;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -16,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
+
 
 @Data
 @AllArgsConstructor
@@ -33,4 +34,11 @@ public class Fraud {
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime date;
+
+    public Fraud(FraudRequest fraudRequest) {
+        this.company = fraudRequest.getCompany();
+        this.country = fraudRequest.getCountry();
+        this.card = fraudRequest.getCard();
+        this.date = fraudRequest.getDate();
+    }
 }

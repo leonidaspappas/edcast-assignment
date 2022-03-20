@@ -24,10 +24,11 @@ public class DateTransformUtils {
         DateTimeFormatter fmt = new DateTimeFormatterBuilder()
                 .appendPattern("yyyy-MM-dd")
                 .optionalStart()
-                .appendPattern(" HH:mm")
+                .appendPattern(" HH:mm:ss")
                 .optionalEnd()
                 .parseDefaulting(ChronoField.HOUR_OF_DAY, 0)
                 .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0)
+                .parseDefaulting(ChronoField.SECOND_OF_MINUTE, 0)
                 .toFormatter();
         return LocalDate.parse(strDate, fmt).atStartOfDay();
     }

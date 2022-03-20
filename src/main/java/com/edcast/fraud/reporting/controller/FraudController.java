@@ -3,9 +3,11 @@ package com.edcast.fraud.reporting.controller;
 import com.edcast.fraud.reporting.dto.FraudReportDto;
 import com.edcast.fraud.reporting.entity.Fraud;
 import com.edcast.fraud.reporting.entity.FraudReport;
+import com.edcast.fraud.reporting.requests.FraudRequest;
 import com.edcast.fraud.reporting.response.PdfReportResponse;
 import com.edcast.fraud.reporting.service.FraudService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -23,6 +25,12 @@ public class FraudController {
     public Fraud addFraud(@RequestBody Fraud fraud){
         return fraudService.saveFraud(fraud);
     }
+    @KafkaListener(groupId = "fraud-detected", topics = "fraud-detected", containerFactory = "fraudKafkaListenerContainerFactory")
+    public Fraud addFraudFromKafka(@RequestBody FraudRequest fraudRequest){
+        Fraud fraud = new Fraud(fraudRequest);
+        return addFraud(fraud);
+    }
+
     @GetMapping("/fraud/list")
     public List<Fraud> getAllTutorials( @RequestParam(name="page",defaultValue = "0") int page,
                                         @RequestParam(name="size",defaultValue = "3") int size,
@@ -36,7 +44,7 @@ public class FraudController {
         return fraudService.generateFraudReport(fraudReportDto.getCompany(), fraudReportDto.getFrom(), fraudReportDto.getTo());
     }
     @GetMapping("/fraud/report/{id}")
-    public Optional<FraudReport> getFraudReportById(@PathVariable(name="id") int id){
+    public PdfReportResponse getFraudReportById(@PathVariable(name="id") int id){
         return fraudService.findById(id);
     }
 }
