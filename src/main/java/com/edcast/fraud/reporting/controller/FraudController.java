@@ -2,8 +2,7 @@ package com.edcast.fraud.reporting.controller;
 
 import com.edcast.fraud.reporting.dto.FraudReportDto;
 import com.edcast.fraud.reporting.entity.Fraud;
-import com.edcast.fraud.reporting.entity.FraudReport;
-import com.edcast.fraud.reporting.requests.FraudRequest;
+import com.edcast.fraud.reporting.requests.KafkaFraudRequest;
 import com.edcast.fraud.reporting.response.PdfReportResponse;
 import com.edcast.fraud.reporting.service.FraudService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/api")
@@ -26,9 +24,9 @@ public class FraudController {
         return fraudService.saveFraud(fraud);
     }
     @KafkaListener(groupId = "fraud-detected", topics = "fraud-detected", containerFactory = "fraudKafkaListenerContainerFactory")
-    public Fraud addFraudFromKafka(@RequestBody FraudRequest fraudRequest){
+    public Fraud addFraudFromKafka(@RequestBody KafkaFraudRequest fraudRequest){
         Fraud fraud = new Fraud(fraudRequest);
-        return addFraud(fraud);
+        return fraudService.saveFraud(fraud);
     }
 
     @GetMapping("/fraud/list")

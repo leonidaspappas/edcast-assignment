@@ -10,7 +10,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class FraudRequest {
+public class KafkaFraudRequest {
     private int id;
     private String company;
     private String country;

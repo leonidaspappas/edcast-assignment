@@ -1,7 +1,6 @@
 package com.edcast.fraud.reporting.config;
 
-import com.edcast.fraud.reporting.entity.Fraud;
-import com.edcast.fraud.reporting.requests.FraudRequest;
+import com.edcast.fraud.reporting.requests.KafkaFraudRequest;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,18 +38,18 @@ public class KafkaConsumerConfig {
     }
 
     @Bean
-    public ConsumerFactory<String, FraudRequest> fraudRequestConsumerFactory() {
+    public ConsumerFactory<String, KafkaFraudRequest> fraudRequestConsumerFactory() {
         Map<String, Object> configs = new HashMap<>();
         configs.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         configs.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         configs.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
         configs.put(ConsumerConfig.GROUP_ID_CONFIG, "fraud-detected");
-        return new DefaultKafkaConsumerFactory<>(configs, new StringDeserializer(), new JsonDeserializer<>(FraudRequest.class));
+        return new DefaultKafkaConsumerFactory<>(configs, new StringDeserializer(), new JsonDeserializer<>(KafkaFraudRequest.class));
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, FraudRequest> fraudKafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, FraudRequest> factory = new ConcurrentKafkaListenerContainerFactory<String, FraudRequest>();
+    public ConcurrentKafkaListenerContainerFactory<String, KafkaFraudRequest> fraudKafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, KafkaFraudRequest> factory = new ConcurrentKafkaListenerContainerFactory<String, KafkaFraudRequest>();
         factory.setConsumerFactory(fraudRequestConsumerFactory());
         return factory;
     }

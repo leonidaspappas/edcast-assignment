@@ -1,7 +1,7 @@
 package com.edcast.fraud.reporting.entity;
 
 
-import com.edcast.fraud.reporting.requests.FraudRequest;
+import com.edcast.fraud.reporting.requests.KafkaFraudRequest;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -35,7 +35,7 @@ public class Fraud {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime date;
 
-    public Fraud(FraudRequest fraudRequest) {
+    public Fraud(KafkaFraudRequest fraudRequest) {
         this.company = fraudRequest.getCompany();
         this.country = fraudRequest.getCountry();
         this.card = fraudRequest.getCard();
