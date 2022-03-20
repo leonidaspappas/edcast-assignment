@@ -10,6 +10,7 @@ import com.edcast.fraud.reporting.repository.FraudRepository;
 import com.edcast.fraud.reporting.requests.PdfReportApiRequest;
 import com.edcast.fraud.reporting.response.PdfReportResponse;
 import com.edcast.fraud.reporting.response.PdfServiceResponse;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -93,9 +94,10 @@ public class FraudService {
         return pdfReportResponse;
     }
 
-    public Optional<FraudReport> findById(int id){
+    public PdfReportResponse findById(int id){
         Optional<FraudReport> fraudReport = fraudReportRepository.findById(id);
-        return fraudReport;
+        PdfReportResponse pdfReportResponse = new PdfReportResponse(fraudReport.get().getId(), fraudReport.get().getReportBase64());
+        return pdfReportResponse;
     }
 
 }
